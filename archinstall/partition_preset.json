@@ -1,0 +1,130 @@
+{
+    "_comment": "PACUSER - Archinstall Partition Preset - GTX 1060 Hybrid Laptop",
+    "config_version": "2.6",
+    "additional-repositories": ["multilib"],
+    "audio": "pipewire",
+    "bootloader": "grub-install",
+    "debug": false,
+    "desktop-environment": "kde",
+    "disk_config": {
+        "config_type": "manual_partitioning",
+        "device_modifications": [
+            {
+                "_comment": "NVMe SSD - Sistema Principale",
+                "device": "/dev/nvme0n1",
+                "partitions": [
+                    {
+                        "_comment": "EFI System Partition",
+                        "dev_path": null,
+                        "flags": ["Boot"],
+                        "fs_type": "fat32",
+                        "length": {
+                            "sector_size": null,
+                            "total_size": null,
+                            "unit": "GiB",
+                            "value": 1
+                        },
+                        "mount_options": [],
+                        "mountpoint": "/boot",
+                        "obj_id": "efi_part",
+                        "start": {
+                            "sector_size": null,
+                            "total_size": null,
+                            "unit": "MiB",
+                            "value": 1
+                        },
+                        "status": "create",
+                        "type": "primary"
+                    },
+                    {
+                        "_comment": "Root Partition - 100GB per sistema + DKMS",
+                        "dev_path": null,
+                        "flags": [],
+                        "fs_type": "ext4",
+                        "length": {
+                            "sector_size": null,
+                            "total_size": null,
+                            "unit": "GiB",
+                            "value": 100
+                        },
+                        "mount_options": [],
+                        "mountpoint": "/",
+                        "obj_id": "root_part",
+                        "start": {
+                            "sector_size": null,
+                            "total_size": null,
+                            "unit": "GiB",
+                            "value": 1
+                        },
+                        "status": "create",
+                        "type": "primary"
+                    },
+                    {
+                        "_comment": "Home Partition - Resto del disco",
+                        "dev_path": null,
+                        "flags": [],
+                        "fs_type": "ext4",
+                        "length": {
+                            "sector_size": null,
+                            "total_size": null,
+                            "unit": "Percent",
+                            "value": 100
+                        },
+                        "mount_options": [],
+                        "mountpoint": "/home",
+                        "obj_id": "home_part",
+                        "start": {
+                            "sector_size": null,
+                            "total_size": null,
+                            "unit": "GiB",
+                            "value": 101
+                        },
+                        "status": "create",
+                        "type": "primary"
+                    }
+                ],
+                "wipe": true
+            }
+        ]
+    },
+    "hostname": "paclegion",
+    "kernels": ["linux-lts", "linux-zen"],
+    "locale_config": {
+        "kb_layout": "it",
+        "sys_enc": "UTF-8",
+        "sys_lang": "it_IT"
+    },
+    "mirror_config": {
+        "custom_mirrors": [],
+        "mirror_regions": {
+            "Italy": ["https://archmirror.it/repos/$repo/os/$arch"]
+        }
+    },
+    "network_config": "NetworkManager",
+    "no_pkg_lookups": false,
+    "ntp": true,
+    "packages": [
+        "git",
+        "vim",
+        "base-devel",
+        "linux-lts-headers",
+        "linux-zen-headers",
+        "intel-ucode"
+    ],
+    "parallel downloads": 10,
+    "profile_config": {
+        "gfx_driver": null,
+        "greeter": "sddm",
+        "profile": {
+            "custom_settings": {},
+            "details": ["kde"],
+            "main": "Desktop"
+        }
+    },
+    "script": "default",
+    "silent": false,
+    "swap": true,
+    "timezone": "Europe/Rome",
+    "uki": false,
+    "version": "2.6"
+}

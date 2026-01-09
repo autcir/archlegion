@@ -1,0 +1,76 @@
+# .gitignore for Arch Linux DevOps Workstation
+
+# Secrets and credentials
+secrets.sh
+*.secret
+*.credentials
+user_credentials.json.local
+pacuser.conf.local
+
+# Backup files
+*.backup.*
+*.bak
+*~
+
+# Editor files
+*.swp
+*.swo
+*.swn
+*.un~
+Session.vim
+.netrwhist
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Archives
+*.tar.gz
+*.zip
+*.rar
+
+# Compiled files
+*.o
+*.so
+*.a
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Docker
+.dockerignore
+
+# Archives
+*.tar
+*.tgz
+*.tar.xz

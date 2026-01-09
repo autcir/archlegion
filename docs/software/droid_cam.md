@@ -1,14 +1,21 @@
-# Virtual Webcam Setup on Arch Linux: v4l2loopback & DroidCam
+# 📹 Virtual Webcam Setup on Arch Linux: v4l2loopback & DroidCam
+
+> Use your Android phone as a webcam on Arch Linux
 
 This guide provides instructions on how to set up a virtual webcam using `v4l2loopback` and `DroidCam` on Arch Linux. The virtual webcam can be used for various applications like video conferencing, streaming, or testing webcam software without requiring a physical webcam.
 
-## Prerequisites
+---
+
+## 📋 Prerequisites
 
 - An Arch Linux system
 - An internet connection
 - Root (sudo) privileges
+- Android phone with DroidCam app installed
 
-## Table of Contents
+---
+
+## 📚 Table of Contents
 
 - [1. Install Required Packages](#1-install-required-packages)
 - [2. Load the v4l2loopback Kernel Module](#2-load-the-v4l2loopback-kernel-module)
@@ -16,6 +23,7 @@ This guide provides instructions on how to set up a virtual webcam using `v4l2lo
 - [4. Set Default Parameters](#4-set-default-parameters)
 - [5. Reload the Modules](#5-reload-the-modules)
 - [6. Auto-install Kernel Modules](#6-auto-install-kernel-modules)
+- [7. Connect DroidCam](#7-connect-droidcam)
 
 ---
 
@@ -121,3 +129,66 @@ sudo dkms autoinstall
 This command will ensure that any necessary kernel module updates are installed automatically when you update your kernel.
 
 ---
+
+## 7. Connect DroidCam
+
+### Install DroidCam App on Android
+
+1. Download **DroidCam** from Google Play Store
+2. Connect your phone and computer to the same network
+
+### Start DroidCam Server
+
+```bash
+droidcam
+```
+
+### Connect from Android App
+
+1. Open DroidCam app on your phone
+2. Enter your computer's IP address
+3. Tap "Connect"
+
+### Verify Connection
+
+```bash
+ls /dev/video*
+```
+
+You should see the virtual webcam device listed.
+
+---
+
+## 🔧 Troubleshooting
+
+### Module Not Loading
+
+```bash
+sudo modprobe v4l2loopback devices=1 exclusive_caps=1
+```
+
+### No Video Device Found
+
+```bash
+sudo dkms autoinstall
+sudo reboot
+```
+
+### Connection Issues
+
+- Ensure both devices are on the same network
+- Check firewall settings
+- Try USB connection instead of Wi-Fi
+
+---
+
+## 📖 Related Documentation
+
+- [GNOME Keyring](gnome_keyring.md) - Secure credential storage
+- [README](../README.md) - Main installation guide
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](../../LICENSE) for details.

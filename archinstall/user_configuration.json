@@ -1,0 +1,56 @@
+{
+    "config_version": "2.6.0",
+    "additional-repositories": ["multilib"],
+    "archinstall-language": "Italian",
+    "audio_config": {
+        "audio": "pipewire"
+    },
+    "bootloader": "grub-install",
+    "debug": false,
+    "hostname": "archlgion",
+    "kernels": ["linux"],
+    "locale_config": {
+        "kb_layout": "it",
+        "sys_enc": "UTF-8",
+        "sys_lang": "it_IT"
+    },
+    "mirror_config": {
+        "custom_mirrors": [],
+        "mirror_regions": {
+            "Italy": ["https://archmirror.it/repos/$repo/os/$arch"],
+            "Germany": [],
+            "France": []
+        }
+    },
+    "network_config": {
+        "type": "nm"
+    },
+    "ntp": true,
+    "packages": [
+        "base-devel",
+        "git",
+        "vim",
+        "nano",
+        "wget",
+        "curl",
+        "htop",
+        "networkmanager",
+        "openssh",
+        "linux-headers",
+        "dkms"
+    ],
+    "parallel_downloads": 10,
+    "profile_config": {
+        "gfx_driver": "Nvidia (proprietary)",
+        "greeter": "sddm",
+        "profile": {
+            "details": ["kde"],
+            "main": "Desktop"
+        }
+    },
+    "swap": true,
+    "timezone": "Europe/Rome",
+    "uki": false,
+    "version": "2.6.0",
+    "__comment__": "PACUSER DevOps Workstation - Configurazione Archinstall Personalizzata"
+}

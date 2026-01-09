@@ -1,15 +1,21 @@
-# Arch Linux: Zsh, System Optimizations, and Essential Software for Lenovo Legion Y520
+# ⚡ Arch Linux: System Utilities, Zsh, and Optimizations for Lenovo Legion Y520
+
+> Complete system optimization, power management, and shell configuration
 
 This guide provides the steps to install **Zsh**, essential software, optimize the system for performance and battery life, and install necessary drivers on **Arch Linux** for the **Lenovo Legion Y520**. This includes setting up **Oh My Zsh**, configuring power management, installing wireless and Bluetooth tools, and much more.
 
-## Prerequisites
+---
+
+## 📋 Prerequisites
 
 Before proceeding, make sure you have:
-- A working installation of **Arch Linux**.
-- A stable internet connection.
-- Administrative (sudo) access.
+- A working installation of **Arch Linux**
+- A stable internet connection
+- Administrative (sudo) access
 
-## Table of Contents
+---
+
+## 📚 Table of Contents
 
 - [1. Configure Italian Keyboard](#1-configure-italian-keyboard)
 - [2. Optimize Pacman](#2-optimize-pacman)
@@ -30,6 +36,7 @@ Before proceeding, make sure you have:
 - [17. Install WhiteSur Theme](#17-install-whitesur-theme)
 - [18. Configure Sensors](#18-configure-sensors)
 - [19. Test System Components](#19-test-system-components)
+- [20. Troubleshooting](#20-troubleshooting)
 
 ---
 
@@ -369,3 +376,65 @@ sudo sensors
 sudo powertop --auto-tune
 ```
 
+---
+
+## 20. Troubleshooting
+
+### Zsh Not Loading
+
+```bash
+chsh -s $(which zsh)
+```
+
+Logout and login again.
+
+### Power Management Not Working
+
+```bash
+sudo systemctl status tlp
+sudo systemctl status thermald
+sudo tlp start
+```
+
+### Firewall Blocking Connections
+
+```bash
+sudo ufw status verbose
+sudo ufw allow PORT/tcp
+```
+
+### Bluetooth Not Working
+
+```bash
+sudo systemctl status bluetooth
+sudo systemctl start bluetooth
+bluetoothctl
+```
+
+### Sensors Not Detected
+
+```bash
+sudo sensors-detect --auto
+sudo modprobe coretemp
+```
+
+### Intel Undervolt Not Applying
+
+```bash
+sudo systemctl status intel-undervolt
+sudo intel-undervolt measure
+```
+
+---
+
+## 📖 Related Documentation
+
+- [Desktop Setup](01-desktop.md) - KDE/XFCE, NVIDIA, Optimus
+- [Software Setup](03-software.md) - Applications, Steam, VirtualBox
+- [README](README.md) - Main installation guide
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](../LICENSE) for details.

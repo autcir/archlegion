@@ -1,0 +1,85 @@
+# Configurazione Starship completa e personalizzata
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$docker_context\
+$cmd_duration\
+$time\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[➜](bold green) "
+error_symbol = "[➜](bold red) "
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+
+[hostname]
+format = " 🐍 [$hostname](bold blue) "
+ssh_only = false
+disabled = false
+
+[username]
+format = "👾 [$user](bold yellow)@"
+show_always = true
+disabled = false
+
+[git_branch]
+symbol = "🌱 "
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+
+[docker_context]
+format = "🐳 [$context](blue bold) "
+only_with_files = false
+disabled = false
+
+[cmd_duration]
+min_time = 2000
+format = "⏱️  [$duration](bold yellow) "
+show_milliseconds = false
+
+[time]
+disabled = false
+format = "🕐 [$time](bold white) "
+time_format = "%H:%M"
+use_12hr = false
+
+[package]
+disabled = true
+
+[nodejs]
+format = "via [⬢ $version](bold green) "
+
+[python]
+format = 'via [🐍 ${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+
+[rust]
+format = "via [🦀 $version](red bold) "
+
+[golang]
+format = "via [🐹 $version](bold cyan) "
+
+[java]
+format = "via [☕ $version](red dimmed) "
+
+[memory_usage]
+disabled = false
+threshold = 75
+format = "via $symbol [${ram_pct}](bold dimmed) "
+
+[battery]
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
+
+[[battery.display]]
+threshold = 30
+style = "bold red"

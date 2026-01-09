@@ -1,264 +1,367 @@
-# Arch Linux Installation Guide for Lenovo Legion Y520
+# 🖥️ Arch Linux DevOps Workstation - Complete Setup
 
-This is a step-by-step guide to install **Arch Linux** on the **Lenovo Legion Y520** laptop. The process is fully UEFI-based and includes all the essential steps to configure the system properly. This guide is intended for advanced users who are familiar with Linux systems.
+> **Automated Arch Linux installation and configuration for DevOps, Cloud Engineering, and Development**
 
-## Prerequisites
+[![Arch Linux](https://img.shields.io/badge/Arch_Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)](https://archlinux.org/)
+[![DevOps](https://img.shields.io/badge/DevOps-Ready-blue?style=for-the-badge)](https://www.devops.com/)
+[![Lenovo Legion](https://img.shields.io/badge/Lenovo_Legion-Y520-red?style=for-the-badge)](https://www.lenovo.com/it/it/laptops/legion-series/legion-y-series/legion-y520/)
 
-Before starting the installation, ensure you have:
-
-- A bootable **Arch Linux USB drive**.
-- An active internet connection.
-- Backup of any important data from the device (installation will wipe all data on the disk).
-- Access to UEFI/BIOS settings to boot from USB.
-
-## Table of Contents
-
-- [1. Verify System Connection](#1-verify-system-connection)
-- [2. Set Keyboard Layout](#2-set-keyboard-layout)
-- [3. Update System Clock](#3-update-system-clock)
-- [4. Partitioning the Disk](#4-partitioning-the-disk)
-- [5. Format the Partitions](#5-format-the-partitions)
-- [6. Mount the Partitions](#6-mount-the-partitions)
-- [7. Install Base System](#7-install-base-system)
-- [8. Configure the System](#8-configure-the-system)
-- [9. Install Bootloader (GRUB)](#9-install-bootloader-grub)
-- [10. Network Configuration](#10-network-configuration)
-- [11. Finalizing the Installation](#11-finalizing-the-installation)
+This repository provides a complete, automated solution for installing and configuring **Arch Linux** on the **Lenovo Legion Y520** laptop, optimized for professional DevOps and development work. The setup includes GPU switching (NVIDIA Optimus), security hardening, containerization tools, and comprehensive documentation.
 
 ---
 
-## 1. Verify System Connection
+## 🎯 What's Included
 
-To ensure the internet connection is working properly, run:
+### 🚀 Installation Methods
 
-```bash
-ping -c 3 archlinux.org
-```
+| Method | Description | Time Required |
+|--------|-------------|---------------|
+| **Manual** | Step-by-step installation following guides | 2-3 hours |
+| **Archinstall** | Semi-automated installation with config files | 1-2 hours |
+| **PACUSER Suite** | Fully automated post-installation setup | 30-45 min |
 
----
+### 💻 Hardware Support
 
-## 2. Set Keyboard Layout
+- ✅ **NVIDIA Optimus** - Automatic GPU switching (Intel/NVIDIA)
+- ✅ **Lenovo Legion Y520** - Full hardware support
+- ✅ **Hybrid Graphics** - Power saving and performance modes
+- ✅ **Legacy GPU Support** - Pascal, Maxwell architectures
 
-Set the keyboard layout to Italian (or your preferred layout) by running:
+### 🔒 Security Features
 
-```bash
-loadkeys it
-```
+- ✅ **UFW Firewall** - Pre-configured DevOps rules
+- ✅ **Fail2Ban** - SSH brute-force protection
+- ✅ **GNOME Keyring** - Secure credential storage
+- ✅ **System Hardening** - DevOps-optimized sysctl
 
----
+### 🛠️ Development Tools
 
-## 3. Update System Clock
+- ✅ **Docker & Docker Compose** - With NVIDIA runtime
+- ✅ **Kubernetes** - kubectl, helm, k9s, kubectx
+- ✅ **PostgreSQL** - Database with remote access
+- ✅ **VSCode & Windsurf** - AI-powered IDEs
+- ✅ **Node.js + pnpm**, **Python + UV**
 
-Synchronize the system clock with NTP:
+### ⚡ System Optimizations
 
-```bash
-timedatectl set-ntp true
-```
-
-Set the system timezone to Europe/Rome:
-
-```bash
-timedatectl set-timezone Europe/Rome
-```
-
----
-
-## 4. Partitioning the Disk
-
-Use **`cfdisk`** or another partitioning tool to create the following partitions on your disk (`/dev/nvme0n1` is used as an example):
-
-- **EFI** (512MB)
-- **Swap** (4GB)
-- **Root** (`/`) (50GB)
-- **Home** (`/home`) (Remaining space)
-
-```bash
-cfdisk /dev/nvme0n1
-```
+- ✅ **TLP & Intel Undervolt** - Power management
+- ✅ **ZRAM** - Memory compression
+- ✅ **BBR + CAKE** - Network optimization
+- ✅ **Custom kernel tuning** - DevOps-optimized
 
 ---
 
-## 5. Format the Partitions
+## 📁 Repository Structure
 
-Format the partitions with the following commands:
-
-```bash
-mkfs.fat -F32 /dev/nvme0n1p1  # EFI Partition
-mkswap /dev/nvme0n1p2        # Swap Partition
-swapon /dev/nvme0n1p2        # Activate swap
-mkfs.ext4 /dev/nvme0n1p3      # Root Partition
-mkfs.ext4 /dev/nvme0n1p4      # Home Partition
 ```
-
----
-
-## 6. Mount the Partitions
-
-Mount the root partition and create directories for other partitions:
-
-```bash
-mount /dev/nvme0n1p3 /mnt
-mkdir /mnt/home
-mount /dev/nvme0n1p4 /mnt/home
-mkdir /mnt/boot
-mkdir /mnt/boot/efi
-mount /dev/nvme0n1p1 /mnt/boot/efi
+archlegion/
+├── README.md                    # This file
+├── pacmaster.sh                 # Main orchestrator wrapper
+│
+├── archinstall/                 # 🏗️ Archinstall configurations
+│   ├── README.md                # Archinstall usage guide
+│   ├── user_configuration.json  # System config
+│   ├── user_credentials.json    # User credentials (template)
+│   └── partition_preset.json    # Disk partitioning preset
+│
+├── config/                      # ⚙️ Configuration files
+│   ├── pacuser.conf             # Main configuration
+│   ├── starship.toml            # Starship prompt config
+│   └── dotfiles/                # Shell and app configs
+│
+├── scripts/                     # 📜 Installation scripts
+│   ├── pacmaster.sh             # Real orchestrator
+│   ├── 00_chroot_setup.sh       # Base system setup
+│   ├── 01_desktop_install.sh    # Desktop & drivers
+│   ├── 02_yay_optimus.sh        # AUR & Optimus Manager
+│   ├── 03_system_tuning.sh      # Tuning & security
+│   ├── 04_software_setup.sh     # DevOps software
+│   ├── 05_extras_setup.sh       # Shell & extras
+│   ├── 99_safe_reboot_check.sh  # Pre-reboot verification
+│   └── lib/                     # Shared libraries
+│
+└── docs/                        # 📚 Documentation
+    ├── README.md                # Main installation guide
+    ├── 01-desktop.md            # Desktop environment setup
+    ├── 02-utils.md              # System utilities & optimizations
+    ├── 03-software.md           # Software installation
+    └── software/                # Software-specific guides
+        ├── postgress.md         # PostgreSQL installation
+        ├── postgress_tips.md    # PostgreSQL management
+        ├── gnome_keyring.md     # GNOME Keyring setup
+        ├── droid_cam.md         # Virtual webcam
+        └── rclone.md            # Google Drive mount
 ```
 
 ---
 
-## 7. Install Base System
+## 🚀 Quick Start
 
-Install the base system packages:
+### Option 1: Manual Installation (Recommended for Learning)
+
+Follow the comprehensive installation guide:
 
 ```bash
-pacstrap /mnt base base-devel linux linux-firmware linux-headers intel-ucode nano git networkmanager
+# 1. Read the main installation guide
+cat docs/README.md
+
+# 2. Follow the step-by-step installation process
+# - Base Arch Linux installation
+# - Desktop environment setup
+# - System utilities and optimizations
+# - Software installation
 ```
 
-Generate the `fstab` file:
+### Option 2: Archinstall (Semi-Automated)
+
+Use the pre-configured archinstall files:
 
 ```bash
-genfstab -U /mnt >> /mnt/etc/fstab
+# 1. Boot from Arch Linux ISO
+# 2. Connect to internet
+# 3. Copy archinstall configuration files
+cp archinstall/*.json /root/archinstall/
+
+# 4. Edit credentials
+nano /root/archinstall/user_credentials.json
+
+# 5. Run archinstall
+archinstall --config /root/archinstall/user_configuration.json \
+            --creds /root/archinstall/user_credentials.json
+
+# 3. After first boot, run PACUSER
+./pacmaster.sh
 ```
 
-Chroot into the new system:
+See [archinstall/README.md](archinstall/README.md) for detailed instructions.
+
+### Option 3: PACUSER Suite (Fully Automated)
+
+After base Arch Linux installation, run the automated suite:
 
 ```bash
-arch-chroot /mnt /bin/bash
+# 1. Clone this repository
+git clone https://github.com/ciroautuori/archlegion.git
+cd archlegion
+
+# 2. Configure your settings
+cp config/pacuser.conf config/pacuser.conf.local
+nano config/pacuser.conf.local
+
+# 3. Run the orchestrator
+./pacmaster.sh
+```
+
+The PACUSER suite automates all post-installation steps including desktop setup, system tuning, security configuration, and software installation.
+
+---
+
+## 📚 Documentation
+
+### Installation Guides
+
+| Document | Description |
+|----------|-------------|
+| [Main Installation Guide](docs/README.md) | Complete Arch Linux installation |
+| [Desktop Setup](docs/01-desktop.md) | KDE/XFCE, NVIDIA, Optimus Manager |
+| [System Utilities](docs/02-utils.md) | Zsh, optimizations, power management |
+| [Software Setup](docs/03-software.md) | Applications, Steam, VirtualBox |
+
+### Software Configuration
+
+| Document | Description |
+|----------|-------------|
+| [PostgreSQL Installation](docs/software/postgress.md) | Database setup with remote access |
+| [PostgreSQL Management](docs/software/postgress_tips.md) | Users, databases, and roles |
+| [GNOME Keyring](docs/software/gnome_keyring.md) | Secure credential storage |
+| [Virtual Webcam](docs/software/droid_cam.md) | DroidCam setup |
+| [Rclone](docs/software/rclone.md) | Google Drive mount |
+
+### Configuration
+
+| File | Description |
+|------|-------------|
+| [pacuser.conf](config/pacuser.conf) | Main configuration file |
+| [starship.toml](config/starship.toml) | Starship prompt theme |
+| [archinstall config](archinstall/) | Archinstall configurations |
+
+---
+
+## 🎨 Features by Category
+
+### 🖥️ Desktop Environment
+
+- **KDE Plasma** - Modern, feature-rich desktop
+- **XFCE** - Lightweight alternative
+- **NVIDIA Drivers** - Proprietary with Optimus support
+- **PipeWire Audio** - Modern audio stack
+- **Display Manager** - SDDM (KDE) or LightDM (XFCE)
+
+### 🔐 Security
+
+- **UFW Firewall** - Pre-configured DevOps rules
+- **Fail2Ban** - SSH brute-force protection
+- **GNOME Keyring** - Secure password storage
+- **System Hardening** - DevOps-optimized sysctl
+
+### ☁️ Cloud & Containerization
+
+- **Docker** - With NVIDIA runtime support
+- **Docker Compose** - Multi-container applications
+- **Kubernetes Tools** - kubectl, helm, k9s
+- **Google Cloud SDK** - GCP management
+
+### 💻 Development
+
+- **VSCode** - Visual Studio Code
+- **Windsurf** - AI-powered IDE
+- **Git** - Version control with aliases
+- **Node.js + pnpm** - JavaScript development
+- **Python + UV** - Python development
+
+### ⚡ Performance
+
+- **TLP** - Advanced power management
+- **Intel Undervolt** - CPU/GPU undervolting
+- **ZRAM** - Memory compression
+- **BBR + CAKE** - Network optimization
+
+### 🎮 Gaming
+
+- **Steam** - Gaming platform
+- **Proton** - Windows game compatibility
+- **NVIDIA Optimus** - GPU switching
+- **GameMode** - Performance optimization
+
+---
+
+## 🛠️ Configuration
+
+### Main Configuration File
+
+Edit `config/pacuser.conf` to customize your installation:
+
+```bash
+# System settings
+PACUSER_HOSTNAME="archlinux"
+PACUSER_USERNAME="yourname"
+PACUSER_TIMEZONE="Europe/Rome"
+
+# Docker settings
+PACUSER_DOCKER_ROOT="/var/lib/docker"
+PACUSER_DOCKER_NVIDIA="1"
+
+# Graphics settings
+PACUSER_OPTIMUS_MODE="hybrid"
+PACUSER_ENABLE_OPTIMUS_MANAGER="0"
+
+# Power management
+PACUSER_ENABLE_UNDERVOLT="1"
+PACUSER_UNDERVOLT_CPU="-80"
+
+# Security
+PACUSER_ENABLE_UFW="1"
+PACUSER_ENABLE_FAIL2BAN="1"
+
+# IDEs
+PACUSER_INSTALL_IDES="vscode windsurf"
+```
+
+See [Configuration Guide](config/pacuser.conf) for all available options.
+
+---
+
+## 🧪 Testing
+
+### Verify Installation
+
+After installation, run these checks:
+
+```bash
+# Check GPU
+nvidia-smi
+optimus-manager --status
+
+# Check Docker
+docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
+
+# Check PostgreSQL
+sudo -u postgres psql -c "SELECT version();"
+
+# Check Firewall
+sudo ufw status
+
+# Check Services
+systemctl status tlp
+systemctl status docker
+```
+
+### Run Tests
+
+```bash
+# Run PACUSER test suite
+cd scripts/tests
+./run_tests.sh
 ```
 
 ---
 
-## 8. Configure the System
+## 🔧 Troubleshooting
 
-### Set Timezone:
+### Common Issues
 
-```bash
-ln -sf /usr/share/zoneinfo/Europe/Rome /etc/localtime
-hwclock --systohc
-```
+| Issue | Solution |
+|-------|----------|
+| NVIDIA not detected | Reboot after driver installation |
+| Optimus Manager not working | Check `optimus-manager --status` |
+| Docker requires sudo | Add user to docker group |
+| Firewall blocking connections | Check `sudo ufw status` |
+| PostgreSQL not starting | Check `sudo journalctl -u postgresql` |
 
-### Configure Locale:
-
-Edit `/etc/locale.gen` and uncomment `it_IT.UTF-8 UTF-8`:
-
-```bash
-nano /etc/locale.gen
-```
-
-Generate locales:
-
-```bash
-locale-gen
-```
-
-Set the default language:
-
-```bash
-echo "LANG=it_IT.UTF-8" > /etc/locale.conf
-```
-
-### Set Keyboard Layout:
-
-```bash
-echo "KEYMAP=it" > /etc/vconsole.conf
-```
-
-### Set Hostname:
-
-```bash
-echo "archlegion" > /etc/hostname
-```
-
-### Configure Hosts File:
-
-```bash
-nano /etc/hosts
-```
-
-Add the following lines:
-
-```
-127.0.0.1   localhost
-::1         localhost
-127.0.1.1   archlegion.localdomain    archlegion
-```
-
-### Set Password for Root:
-
-```bash
-passwd
-```
-
-### Create a New User:
-
-Create a new user with sudo privileges:
-
-```bash
-useradd -m -G wheel,storage,power,audio,video,users -s /bin/bash username
-passwd username
-```
-
-Edit the sudoers file to grant sudo privileges:
-
-```bash
-echo "username ALL=(ALL) ALL" | EDITOR=nano visudo
-```
+For detailed troubleshooting, see the [Troubleshooting Guide](docs/README.md#troubleshooting).
 
 ---
 
-## 9. Install Bootloader (GRUB)
+## 📖 Resources
 
-Install GRUB and related tools:
-
-```bash
-pacman -S grub efibootmgr dosfstools mtools --noconfirm
-```
-
-Install GRUB to the system:
-
-```bash
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
-```
-
-Generate the GRUB configuration:
-
-```bash
-grub-mkconfig -o /boot/grub/grub.cfg
-```
+- [Arch Linux Wiki](https://wiki.archlinux.org/)
+- [Lenovo Legion Linux](https://github.com/johnfanv2/LenovoLegionLinux)
+- [Archinstall Documentation](https://github.com/archlinux/archinstall)
+- [NVIDIA Arch Wiki](https://wiki.archlinux.org/title/NVIDIA)
 
 ---
 
-## 10. Network Configuration
+## 🤝 Contributing
 
-Enable **NetworkManager** for managing network connections:
+Contributions are welcome! Please:
 
-```bash
-systemctl enable NetworkManager
-```
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 11. Finalizing the Installation
+## ⭐ Star History
 
-Exit chroot:
-
-```bash
-exit
-```
-
-Unmount all partitions:
-
-```bash
-umount -R /mnt
-```
-
-Reboot the system:
-
-```bash
-reboot
-```
-
-Remove the installation media to boot into the newly installed Arch Linux system.
+If this project helped you set up your Arch Linux workstation, consider giving it a star!
 
 ---
+
+## 📞 Support
+
+For issues and questions:
+
+- Open an issue on GitHub
+- Check the [documentation](docs/)
+- Review [troubleshooting guides](docs/README.md#troubleshooting)
+
+---
+
+**Made with ❤️ for the Arch Linux community**

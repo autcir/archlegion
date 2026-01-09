@@ -1,8 +1,12 @@
-# Arch Linux - Post-Installation Setup for Lenovo Legion Y520
+# 💻 Arch Linux - Post-Installation Software Setup for Lenovo Legion Y520
+
+> Essential applications, development tools, and productivity software
 
 This guide will help you install essential applications, set up Wine, configure VirtualBox, and apply some customizations such as a cursor and theme for your Arch Linux installation.
 
-## Table of Contents
+---
+
+## 📚 Table of Contents
 
 - [1. Install Steam](#1-install-steam)
 - [2. Install Additional Applications](#2-install-additional-applications)
@@ -12,6 +16,7 @@ This guide will help you install essential applications, set up Wine, configure 
 - [6. LMStudio Setup](#6-lmstudio-setup)
 - [7. Apply WhiteSur Theme](#7-apply-whitesur-theme)
 - [8. Final Backup](#8-final-backup)
+- [9. Troubleshooting](#9-troubleshooting)
 
 ---
 
@@ -169,3 +174,69 @@ sudo timeshift --create --comments "full"
 ```
 
 ---
+
+## 9. Troubleshooting
+
+### Steam Not Launching
+
+```bash
+steam --reset
+```
+
+Or reinstall with NVIDIA support:
+```bash
+yay -S steam
+```
+
+### VirtualBox Kernel Modules Not Loading
+
+```bash
+sudo modprobe vboxdrv vboxnetflt vboxnetadp
+```
+
+Ensure your user is in the vboxusers group:
+```bash
+sudo usermod -aG vboxusers $USER
+```
+
+### Wine Applications Not Starting
+
+```bash
+winecfg
+```
+
+Check if Wine is configured correctly and try running in compatibility mode.
+
+### AppImage Not Executing
+
+```bash
+chmod +x filename.AppImage
+./filename.AppImage
+```
+
+If still not working, check for missing dependencies:
+```bash
+ldd filename.AppImage | grep not found
+```
+
+### Theme Not Applying
+
+```bash
+kwriteconfig5 --file kdeglobals --group KDE --keyLookAndFeelTheme WhiteSur
+```
+
+Or use system settings to apply the theme manually.
+
+---
+
+## 📖 Related Documentation
+
+- [Desktop Setup](01-desktop.md) - KDE/XFCE, NVIDIA, Optimus
+- [System Utilities](02-utils.md) - Zsh, optimizations, power management
+- [README](README.md) - Main installation guide
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](../LICENSE) for details.

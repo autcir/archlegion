@@ -1,15 +1,21 @@
-# Arch Linux: Set up GNOME Keyring for Secure Storage
+# 🔐 Arch Linux: Set up GNOME Keyring for Secure Storage
+
+> Secure password and SSH key management on Arch Linux
 
 This guide provides step-by-step instructions to configure **GNOME Keyring** on your **Arch Linux** system for secure management of passwords and SSH keys. The setup involves installing necessary packages, modifying PAM settings, and configuring environment variables.
 
-## Prerequisites
+---
+
+## 📋 Prerequisites
 
 Before proceeding, ensure that:
-- You have **Arch Linux** installed.
-- You have administrative (sudo) access.
-- You are comfortable using a terminal and text editors.
+- You have **Arch Linux** installed
+- You have administrative (sudo) access
+- You are comfortable using a terminal and text editors
 
-## Table of Contents
+---
+
+## 📚 Table of Contents
 
 - [1. Install Required Packages](#1-install-required-packages)
 - [2. Modify PAM Configuration](#2-modify-pam-configuration)
@@ -17,6 +23,7 @@ Before proceeding, ensure that:
 - [4. Verify the Setup](#4-verify-the-setup)
 - [5. Restart GNOME Keyring Daemon](#5-restart-gnome-keyring-daemon)
 - [6. Install Seahorse for Keyring Management](#6-install-seahorse-for-keyring-management)
+- [7. Troubleshooting](#7-troubleshooting)
 
 ---
 
@@ -105,3 +112,51 @@ sudo pacman -S seahorse
 Once installed, you can launch **Seahorse** from your application menu and easily manage your passwords and SSH keys.
 
 ---
+
+## 7. Troubleshooting
+
+### Keyring Not Unlocking Automatically
+
+If the keyring doesn't unlock on login, verify PAM configuration:
+
+```bash
+cat /etc/pam.d/login | grep gnome-keyring
+```
+
+### SSH Keys Not Added
+
+Check if SSH_AUTH_SOCK is set:
+
+```bash
+echo $SSH_AUTH_SOCK
+```
+
+If empty, manually start the daemon:
+
+```bash
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+export SSH_AUTH_SOCK
+```
+
+### Seahorse Not Showing Keys
+
+Restart the keyring daemon:
+
+```bash
+killall gnome-keyring-daemon
+gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
+```
+
+---
+
+## 📖 Related Documentation
+
+- [PostgreSQL Setup](postgress.md) - Database installation
+- [Virtual Webcam](droid_cam.md) - DroidCam setup
+- [README](../README.md) - Main installation guide
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](../../LICENSE) for details.

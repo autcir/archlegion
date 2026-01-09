@@ -1,8 +1,12 @@
-# Arch Linux: Managing PostgreSQL Users, Databases, and Roles
+# 🗄️ Arch Linux: Managing PostgreSQL Users, Databases, and Roles
+
+> Advanced PostgreSQL management and administration guide
 
 This guide provides instructions for managing PostgreSQL users, roles, databases, and related privileges. It includes commands for viewing users, terminating active connections, and deleting users and databases, as well as managing privileges and ownership.
 
-## Table of Contents
+---
+
+## 📚 Table of Contents
 
 - [1. List PostgreSQL Users (Roles)](#1-list-postgresql-users-roles)
 - [2. Terminate Active Connections for Databases](#2-terminate-active-connections-for-databases)
@@ -13,6 +17,8 @@ This guide provides instructions for managing PostgreSQL users, roles, databases
 - [7. Revoke Role Privileges](#7-revoke-role-privileges)
 - [8. Drop Objects Owned by a Role](#8-drop-objects-owned-by-a-role)
 - [9. Drop the Role](#9-drop-the-role)
+- [10. Common Management Tasks](#10-common-management-tasks)
+- [11. Troubleshooting](#11-troubleshooting)
 
 ---
 
@@ -170,3 +176,115 @@ DROP ROLE corso_user;
 ```
 
 ---
+
+## 10. Common Management Tasks
+
+### Create a New User with Password
+
+```sql
+CREATE USER newuser WITH ENCRYPTED PASSWORD 'secure-password';
+```
+
+### Grant All Privileges on a Database
+
+```sql
+GRANT ALL PRIVILEGES ON DATABASE mydb TO newuser;
+```
+
+### Grant Schema Privileges
+
+```sql
+GRANT ALL ON SCHEMA public TO newuser;
+```
+
+### Change User Password
+
+```sql
+ALTER USER username WITH PASSWORD 'new-password';
+```
+
+### Transfer Database Ownership
+
+```sql
+ALTER DATABASE mydb OWNER TO newuser;
+```
+
+### List All Databases
+
+```sql
+\l
+```
+
+### List All Tables in Current Database
+
+```sql
+\dt
+```
+
+### Show Database Size
+
+```sql
+SELECT pg_size_pretty(pg_database_size('mydb'));
+```
+
+### Show Table Size
+
+```sql
+SELECT pg_size_pretty(pg_total_relation_size('tablename'));
+```
+
+---
+
+## 11. Troubleshooting
+
+### Cannot Drop User: "role cannot be dropped because some objects depend on it"
+
+This occurs when the user owns objects. Transfer ownership first:
+
+```sql
+-- Reassign ownership of all tables
+DO $$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' LOOP
+        EXECUTE 'ALTER TABLE ' || quote_ident(r.tablename) || ' OWNER TO postgres';
+    END LOOP;
+END $$;
+
+-- Now drop the user
+DROP ROLE username;
+```
+
+### Cannot Drop Database: "database is being accessed by other users"
+
+Terminate all connections first:
+
+```sql
+SELECT pg_terminate_backend(pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE datname = 'database_name'
+  AND pid <> pg_backend_pid();
+```
+
+### Permission Denied on Operations
+
+Ensure you're connected as the `postgres` superuser:
+
+```bash
+sudo -u postgres psql
+```
+
+---
+
+## 📖 Related Documentation
+
+- [PostgreSQL Installation](postgress.md) - Installation and setup
+- [GNOME Keyring](gnome_keyring.md) - Secure credential storage
+- [README](../README.md) - Main installation guide
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](../../LICENSE) for details.
