@@ -1,0 +1,62 @@
+name: Bug report
+description: A script fails, or a config does not behave as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These scripts run as root. If this is a **security** issue, please do
+        not file it here — see [SECURITY.md](../blob/main/SECURITY.md).
+
+  - type: input
+    id: script
+    attributes:
+      label: Script or config file
+      placeholder: scripts/00_chroot_setup.sh
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Paste the actual error output, not a paraphrase.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware
+      description: Laptop model, CPU, GPU
+      placeholder: Lenovo Legion Y520, i7-7700HQ, GTX 1050 Ti
+    validations:
+      required: true
+
+  - type: textarea
+    id: system
+    attributes:
+      label: System
+      description: Output of `uname -r`, plus kernel/driver versions if relevant.
+      render: shell
+      placeholder: |
+        $ uname -r
+        $ pacman -Q nvidia linux
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: recovery
+    attributes:
+      label: State of the machine
+      options:
+        - label: The machine still boots normally
+        - label: I have a backup / snapshot I can restore from

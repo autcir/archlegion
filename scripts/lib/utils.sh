@@ -309,7 +309,7 @@ install_yay() {
 # Verifica se un pacchetto esiste nei repository
 package_exists() {
     local pkg="$1"
-    pacman -Si "$pkg" &>/dev/null || yay -Si "$pkg" &>/dev/null 2>/dev/null
+    pacman -Si "$pkg" &>/dev/null || yay -Si "$pkg" &>/dev/null
 }
 
 # Verifica se un pacchetto è installato

@@ -1,0 +1,13 @@
+# Colour variables and helpers live in scripts/lib/utils.sh and are consumed by
+# the scripts that source it, so shellcheck cannot see the use site.
+disable=SC2034
+
+# `source "$SCRIPT_DIR/lib/utils.sh"` is a runtime-resolved path.
+disable=SC1090,SC1091
+
+# `local x=$(cmd)` masking the return value: pervasive here and not a live bug
+# in these scripts, where the assignments are not followed by a status check.
+disable=SC2155
+
+# Single-item `for` loops are intentional extension points in the setup scripts.
+disable=SC2043

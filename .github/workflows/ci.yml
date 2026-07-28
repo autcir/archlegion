@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    # Public repo: contributors have no access to the self-hosted fleet, so CI
+    # must run on GitHub-hosted runners to be useful on outside pull requests.
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      # These scripts run as root on a user's machine, so shellcheck is the
+      # cheapest guard against the class of quoting/expansion bug that turns a
+      # setup script into an unrecoverable one. Severity is pinned at `warning`:
+      # `style` is too noisy to gate a merge on today.
+      - name: Run shellcheck
+        run: |
+          mapfile -t files < <(
+            git ls-files '*.sh'
+            git ls-files scripts/ | grep -vE '\.(md|conf)$'
+          )
+          printf 'checking %d files\n' "${#files[@]}"
+          shellcheck -S warning -e SC1091 "${files[@]}"
+
+  syntax:
+    name: Bash syntax
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # `bash -n` catches unparsable scripts that shellcheck may report but not
+      # fail on. A script that cannot be parsed is 100% broken for every user,
+      # which is exactly how 12-transparency-blur.sh shipped with a function
+      # body whose declaration line was missing.
+      - name: Parse every script
+        run: |
+          fail=0
+          while IFS= read -r f; do
+            [ -f "$f" ] || continue
+            head -c2 "$f" | grep -q '#!' || continue
+            if ! out=$(bash -n "$f" 2>&1); then
+              fail=1
+              printf '::error file=%s::%s\n' "$f" "$out"
+            fi
+          done < <(git ls-files '*.sh'; git ls-files scripts/)
+          exit "$fail"
+
+  permissions:
+    name: Executable bits
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # A committed script without +x fails on `./script.sh` for every user who
+      # follows the README. Cheap to check, easy to regress.
+      - name: Every script is executable
+        run: |
+          fail=0
+          while IFS= read -r f; do
+            [ -f "$f" ] || continue
+            head -c2 "$f" | grep -q '#!' || continue
+            if [ ! -x "$f" ]; then
+              fail=1
+              printf '::error file=%s::missing executable bit\n' "$f"
+            fi
+          done < <(git ls-files '*.sh'; git ls-files scripts/)
+          exit "$fail"
+
+  secrets:
+    name: No committed secrets
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # This repo's whole premise is dotfiles + machine config, which is the
+      # single easiest place to leak a key by accident.
+      - name: Scan for private keys
+        run: |
+          if git grep -nIE 'BEGIN [A-Z ]*PRIVATE KEY' -- . ; then
+            echo '::error::private key material committed'
+            exit 1
+          fi
+          echo 'no private key material found'

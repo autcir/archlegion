@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Only GitHub Actions: the workflow files are the one dependency surface here
+  # that receives security updates and can be updated without touching the
+  # host system.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
