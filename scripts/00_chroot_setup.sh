@@ -208,6 +208,7 @@ fi
 # --- 9. Disattivazione Servizi Non Necessari ---
 log_info "Disattivazione servizi non necessari..."
 # Disattivazione servizi non necessari di default (opzionale)
+# shellcheck disable=SC2043  # lista di un elemento: si estende aggiungendo servizi
 for svc in cups.service; do
     if systemctl is-enabled --quiet "$svc" 2>/dev/null; then
         systemctl disable "$svc" 2>/dev/null || true

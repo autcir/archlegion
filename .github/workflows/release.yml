@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, soliso, autcir, archlegion]
     steps:
       - uses: actions/checkout@v7
         with:

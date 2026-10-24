@@ -82,7 +82,8 @@ setup_smart_storage() {
 update_fstab() {
     local dev="$1"
     local mount="$2"
-    local uuid=$(sudo blkid -s UUID -o value "$dev")
+    local uuid
+    uuid=$(sudo blkid -s UUID -o value "$dev")
 
     if [[ -n "$uuid" ]] && ! grep -q "$uuid" /etc/fstab; then
         echo "UUID=$uuid $mount ext4 defaults,noatime,nofail 0 2" | sudo tee -a /etc/fstab
@@ -97,7 +98,8 @@ load_config() {
 
     # Cerca config in ordine di priorità
     if [[ -z "$config_file" ]]; then
-        local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+        local script_dir
+        script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
         local search_paths=(
             "$script_dir/../../config/pacuser.conf"
             "$script_dir/../../pacuser.conf"
@@ -125,7 +127,8 @@ load_config() {
 
 # Carica secrets se presente
 load_secrets() {
-    local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+    local script_dir
+    script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
     local secrets_file="$script_dir/secrets.sh"
 
     if [[ -f "$secrets_file" ]]; then
