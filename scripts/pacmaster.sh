@@ -6,7 +6,8 @@
 set -euo pipefail
 
 # Directory
-readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+readonly SCRIPT_DIR
 readonly SCRIPTS_DIR="$SCRIPT_DIR/scripts"
 source "$SCRIPTS_DIR/lib/utils.sh"
 

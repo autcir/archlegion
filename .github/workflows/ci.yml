@@ -12,15 +12,18 @@ permissions:
 jobs:
   shellcheck:
     name: ShellCheck
-    # Public repo: contributors have no access to the self-hosted fleet, so CI
-    # must run on GitHub-hosted runners to be useful on outside pull requests.
-    runs-on: ubuntu-latest
+    # GitHub-hosted runners are unavailable (the account is billing-locked:
+    # every hosted job failed in 2s), so CI runs on soliso-autcir-archlegion. Pull
+    # requests from outside contributors need maintainer approval first.
+    runs-on: [self-hosted, soliso, autcir, archlegion]
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install shellcheck
-        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      # shellcheck is installed on the runner host (pacman); fail loudly if it
+      # ever goes missing instead of silently checking nothing.
+      - name: Check shellcheck is available
+        run: shellcheck --version
 
       # These scripts run as root on a user's machine, so shellcheck is the
       # cheapest guard against the class of quoting/expansion bug that turns a
@@ -37,7 +40,7 @@ jobs:
 
   syntax:
     name: Bash syntax
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, soliso, autcir, archlegion]
 
     steps:
       - uses: actions/checkout@v7
@@ -61,7 +64,7 @@ jobs:
 
   permissions:
     name: Executable bits
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, soliso, autcir, archlegion]
 
     steps:
       - uses: actions/checkout@v7
@@ -83,7 +86,7 @@ jobs:
 
   secrets:
     name: No committed secrets
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, soliso, autcir, archlegion]
 
     steps:
       - uses: actions/checkout@v7
